@@ -115,7 +115,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = [
-    pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     pkgs.wget
     pkgs.flameshot
     pkgs.wl-clipboard
@@ -133,6 +132,16 @@
     pkgs.mangohud
     pkgs.protonup
     pkgs.wine64
+    pkgs.zapret
+    pkgs.nftables
+    pkgs.git
+    #split lol
+    pkgs.gcc
+    pkgs.python3Full
+    pkgs.gnum4
+    pkgs.gnumake
+    pkgs.bison
+    
 ];
 
   programs.zsh.enable = true;
@@ -202,6 +211,24 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  systemd.services.zapret = {
+    description = "zapret";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    serviceConfig = {
+      Environment = "PATH=/run/current-system/sw/bin:$PATH";
+      Type = "oneshot";
+      WorkingDirectory = "/home/rewind/zapret-discord-youtube-linux";
+      User = "root";
+      ExecStart = "/run/current-system/sw/bin/bash /home/rewind/zapret-discord-youtube-linux/main_script.sh -nointeractive";
+      ExecStop = "/run/current-system/sw/bin/bash /home/rewind/zapret-discord-youtube-linux/stop_and_clean_nft.sh";
+      ExecStopPost = "/usr/bin/env echo 'zapret ded'";
+      PIDFile = "/run/zapret.pid";
+      RemainAfterExit = true;
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
