@@ -44,6 +44,7 @@
     pkgs.i3blocks
     pkgs.fastfetch
     pkgs.vinegar
+
                 #pkgs.gnome-software
   ];
 
@@ -66,6 +67,21 @@
 
   programs.git = {
     enable = true; 
+  };
+
+  wayland.windowManager.sway = {
+    enable=true;
+    config = rec {
+      terminal = "kitty";
+      menu = "wofi --show drun";
+      modifier = "Mod4";
+      gaps.inner = 10;
+      bars = [{position = "top";}];
+      input."*" = {
+        xkb_layout = "us,ru";
+        xkb_options = "grp:alt_shift_toggle";
+      };
+    };
   };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

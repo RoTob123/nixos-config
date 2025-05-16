@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, nixcats, nvf, ... }:
+{ config, lib, pkgs, inputs, nvf, ... }:
 
 {
   imports =
@@ -37,7 +37,7 @@
   stylix = {
     enable = true;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-material-dark-medium.yaml";
-    image = ./buttons.png;
+    image = ./gruvbox-dark-blue.png;
     cursor = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Classic";
@@ -69,9 +69,10 @@
 
   services.gnome.gnome-keyring.enable = true;
 
+ 
   programs.sway = {
     enable = true;
-    package = pkgs.swayfx;
+    wrapperFeatures.gtk = true;
   };
   
   services.displayManager.sddm.enable = true;
@@ -135,6 +136,9 @@
     pkgs.zapret
     pkgs.nftables
     pkgs.git
+    pkgs.lua
+    pkgs.libreoffice-qt
+    pkgs.hunspell
     #split lol
     pkgs.gcc
     pkgs.python3Full
@@ -188,7 +192,7 @@
   };
 
   environment.sessionVariables = {
-    FLAKE = "/etc/nixos";
+    NH_FLAKE = "/etc/nixos";
   };
 
   fonts.packages = [  ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
@@ -212,23 +216,23 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  systemd.services.zapret = {
-    description = "zapret";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    serviceConfig = {
-      Environment = "PATH=/run/current-system/sw/bin:$PATH";
-      Type = "oneshot";
-      WorkingDirectory = "/home/rewind/zapret-discord-youtube-linux";
-      User = "root";
-      ExecStart = "/run/current-system/sw/bin/bash /home/rewind/zapret-discord-youtube-linux/main_script.sh -nointeractive";
-      ExecStop = "/run/current-system/sw/bin/bash /home/rewind/zapret-discord-youtube-linux/stop_and_clean_nft.sh";
-      ExecStopPost = "/usr/bin/env echo 'zapret ded'";
-      PIDFile = "/run/zapret.pid";
-      RemainAfterExit = true;
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
+  #systemd.services.zapret = {
+  #  description = "zapret";
+  #  after = [ "network-online.target" ];
+  #  wants = [ "network-online.target" ];
+  #  serviceConfig = {
+  #    Environment = "PATH=/run/current-system/sw/bin:$PATH";
+  #    Type = "oneshot";
+  #    WorkingDirectory = "/home/rewind/zapret-discord-youtube-linux";
+  #    User = "root";
+  #    ExecStart = "/run/current-system/sw/bin/bash /home/rewind/zapret-discord-youtube-linux/main_script.sh -nointeractive";
+  #    ExecStop = "/run/current-system/sw/bin/bash /home/rewind/zapret-discord-youtube-linux/stop_and_clean_nft.sh";
+  #    ExecStopPost = "/usr/bin/env echo 'zapret ded'";
+  #    PIDFile = "/run/zapret.pid";
+  #    RemainAfterExit = true;
+  #  };
+  #  wantedBy = [ "multi-user.target" ];
+  #};
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

@@ -4,8 +4,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    nixcats.url = "/home/rewind/.config/nvim";
-
     nvf.url = "github:notashelf/nvf";
 
     stylix.url = "github:danth/stylix";
@@ -16,7 +14,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixcats, nvf, ... }@inputs: {
+  outputs = { self, nixpkgs, nvf, ... }@inputs: {
 
     nixosConfigurations.nixrewind = nixpkgs.lib.nixosSystem {
       specialArgs = {inherit inputs;};
